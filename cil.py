@@ -37,38 +37,31 @@ class RoomWindow(arcade.Window):
         self.security_sprite2 = ModelSprite('images/Heart.png',model = self.world.secure2)
         self.security_sprite3 = ModelSprite('images/Heart.png',model = self.world.secure3)
         self.security_sprite4 = ModelSprite('images/Heart.png',model = self.world.secure4)
-        
+        self.gg = arcade.create_text("Game over", arcade.color.BLACK, 50)
 
     def update(self, delta):
         self.world.update(delta)
 
     def on_draw(self):
         arcade.start_render()
-        #if self.spy_sprite.sp.gg == 0:
-        self.spy_sprite.draw()
-        self.security_sprite1.draw()
-        self.security_sprite2.draw()
-        self.security_sprite3.draw()
-        self.security_sprite4.draw()
-        '''
-            xx = 100
-            yy = 100
-            text = "Score : {:d}".format(self.snake_sprite.snake.length-3)
-            self.t8 = arcade.create_text(text, arcade.color.BLACK, 14)
-            arcade.render_text(self.t8, xx, yy)
-            
-
+        
+        if self.world.gg == 0:
+            self.spy_sprite.draw()
+            self.security_sprite1.draw()
+            self.security_sprite2.draw()
+            self.security_sprite3.draw()
+            self.security_sprite4.draw()
         else:
-            xx = 240
-            yy = SCREEN_HEIGHT//2 - 64
-            start_x = 180
-            start_y = SCREEN_HEIGHT//2 + 64
-            arcade.render_text(self.t1,start_x,start_y)
+            #xx = 240
+            #yy = SCREEN_HEIGHT//2 - 64
+            start_x = 300
+            start_y = 200 
+            arcade.render_text(self.gg,start_x,start_y)
             arcade.set_background_color(arcade.color.CHARCOAL)
-            text = "Score : {:d}".format(self.snake_sprite.snake.length-3)
-            self.t8 = arcade.create_text(text, arcade.color.BLACK, 30)
-            arcade.render_text(self.t8, xx, yy)
-        '''
+            #text = "Score : {:d}".format(self.snake_sprite.snake.length-3)
+            #self.t8 = arcade.create_text(text, arcade.color.BLACK, 30)
+            #arcade.render_text(self.t8, xx, yy)
+        
     def on_key_press(self, key, key_modifiers):
         self.world.on_key_press(key, key_modifiers)
  

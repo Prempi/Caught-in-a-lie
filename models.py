@@ -15,8 +15,8 @@ DIR_OFFSET = {DIR_UP:(0,1), DIR_RIGHT:(1,0), DIR_DOWN:(0,-1), DIR_LEFT:(-1,0)}
 
 class Spy:
     BLOCK_SIZE = 16
-    #STATE_RUN = 1
-    #STATE_CHECK = 2
+    STATE_RUN = 1
+    STATE_CHECK = 2
     #LIE_WAIT = 1.5
     MOVE_WAIT = 0.18
     def __init__(self, world, x, y):
@@ -27,17 +27,27 @@ class Spy:
         #self.lie_time = 0
         self.direction = DIR_RIGHT
         self.state = STATE_RUN
+        self.press = 0
         self.score = 0
         self.gg = 0
-    '''
+    
     def lie(self,Security,count):
-        if count%160==0 and self.direction != Security.direction:
-            self.gg = 1
-            return
-        if(self.direction == Security.direction):
-            self.score += 1
-        self.lie_time = 0
-    '''
+        if count%160==0 and self.press == 0:
+            #self.gg = 1
+            return False
+
+        if self.press == 1:
+            #print(Security.direction)
+            if self.direction != Security.realdir:
+                print(str(self.direction)+' ... '+str(Security.realdir))
+                #self.gg = 1
+                return False
+                
+            elif self.direction == Security.realdir:
+                self.score += 1
+                self.press = 0
+                print(str(self.direction)+' ... '+str(Security.realdir))
+                return True
     
     def out_of_range(self):
         if self.x == 960:
@@ -72,6 +82,7 @@ class Security:
         self.tempx = x
         self.tempy = y
         self.direction = 1
+        self.realdir = 0
 
     def randomdir(self):
         self.direction = randint(0,100)%4 + 1
@@ -84,6 +95,7 @@ class Security:
             self.tempy = self.y
             self.x += self.SE_SIZE*DIR_OFFSET[self.direction][0]
             self.y += self.SE_SIZE*DIR_OFFSET[self.direction][1]
+            self.realdir = self.direction
             print('real dir = '+str(self.direction))
         elif count == 18:
             self.x = self.tempx
@@ -100,6 +112,7 @@ class World:
         self.secure3 = Security(self,608,100)
         self.secure4 = Security(self,768,100)
         self.count = 1
+        self.gg = 0
         
         #self.state = STATE_RUN
         
@@ -113,20 +126,35 @@ class World:
                 self.secure.update(self.count)
             self.wait += 0.5
             if self.wait < MOVE_WAIT:
+                
+                if(self.spy.direction==self.secure.realdir):
+                    print('True')
+                elif(self.spy.press == 1 and self.spy.direction!=self.secure.realdir):
+                    print('False')
+                    self.gg = 1
+                elif(self.spy.press == 0 and self.count == 160):
+                    self.gg = 1
                 return
             self.wait = 0
             self.spy.state = STATE_RUN
             self.count = 1
-           
+
         elif self.spy.x == 416:
             self.spy.state = STATE_CHECK
-            
             self.secure2.randomdir()
             self.count += 1
             if(self.count%9==0):
                 self.secure2.update(self.count)
             self.wait += 0.5
             if self.wait < MOVE_WAIT:
+                
+                if(self.spy.direction==self.secure2.realdir):
+                    print('True')
+                elif(self.spy.press == 1 and self.spy.direction!=self.secure2.realdir):
+                    print(str(self.spy.direction)+' ... '+str(self.secure.realdir))
+                    self.gg = 1
+                elif(self.spy.press == 0 and self.count == 160):
+                    self.gg = 1
                 return
             self.wait = 0
             self.spy.state = STATE_RUN
@@ -140,6 +168,14 @@ class World:
                 self.secure3.update(self.count)
             self.wait += 0.5
             if self.wait < MOVE_WAIT:
+                
+                if(self.spy.direction==self.secure3.realdir):
+                    print('True')
+                elif(self.spy.press == 1 and self.spy.direction!=self.secure3.realdir):
+                    
+                    self.gg = 1
+                elif(self.spy.press == 0 and self.count == 160):
+                    self.gg = 1
                 return
             self.wait = 0
             self.spy.state = STATE_RUN
@@ -153,22 +189,39 @@ class World:
                 self.secure4.update(self.count)
             self.wait += 0.5
             if self.wait < MOVE_WAIT:
+               
+                if(self.spy.direction==self.secure4.realdir):
+                    print('True')
+                elif(self.spy.press == 1 and self.spy.direction!=self.secure4.realdir):
+                    print('False')
+                    self.gg = 1
+                elif(self.spy.press == 0 and self.count == 160):
+                    self.gg = 1
                 return
             self.wait = 0
             self.spy.state = STATE_RUN
             self.count = 1
+
+        self.spy.direction = DIR_RIGHT
+        self.spy.press = 0
         #self.spy.lie(self.secure,delta)
+
+    
         
-def on_key_press(self, key, key_modifiers):
-        if self.spy.state == self.spy.STATE_RUN:
-            return
-        if key == arcade.key.UP:
-            self.spy.direction = DIR_UP
-        elif key == arcade.key.DOWN:
-            self.spy.direction = DIR_DOWN
-        elif key == arcade.key.LEFT:
-            self.spy.direction = DIR_LEFT
-        elif key == arcade.key.RIGHT:
-            self.spy.direction = DIR_RIGHT
+    def on_key_press(self, key, key_modifiers):
+            if self.spy.state == self.spy.STATE_RUN:
+                return
+            if key == arcade.key.UP:
+                self.spy.direction = DIR_UP
+                self.spy.press = 1
+            elif key == arcade.key.DOWN:
+                self.spy.direction = DIR_DOWN
+                self.spy.press = 1
+            elif key == arcade.key.LEFT:
+                self.spy.direction = DIR_LEFT
+                self.spy.press = 1
+            elif key == arcade.key.RIGHT:
+                self.spy.direction = DIR_RIGHT
+                self.spy.press = 1
 
         
