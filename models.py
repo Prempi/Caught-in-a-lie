@@ -27,6 +27,7 @@ class Spy:
         self.press = 0
         self.score = 0
         self.gg = 0
+        
     
     def out_of_range(self):
         if self.x == 960:
@@ -91,20 +92,23 @@ class World:
         self.secure4 = Security(self,768,100)
         self.count = 1
         self.gg = 0
+        self.mode = randint(1,2)
+        print(self.mode)
         
     def update(self, delta):
         self.spy.update(delta)
         if self.spy.x == 256:
-            self.checknaja(self.secure)
+            self.checknaja(self.secure,self.mode)
         elif self.spy.x == 416:
-            self.checknaja(self.secure2)
+            self.checknaja(self.secure2,self.mode)
         elif self.spy.x == 576:
-            self.checknaja(self.secure3)
+            self.checknaja(self.secure3,self.mode)
         elif self.spy.x == 736:
-            self.checknaja(self.secure4)
-        
+            self.checknaja(self.secure4,self.mode)
+        elif self.spy.x > 736:
+            self.mode = randint(1,2)
            
-    def checknaja(self,secur):
+    def checknaja(self,secur,mode):
             
         self.spy.state = STATE_CHECK
         secur.randomdir()
@@ -114,12 +118,16 @@ class World:
             secur.update(self.count)
         self.wait += 0.5
         if self.wait < MOVE_WAIT:
-            #if self.spy.press == 1 and self.spy.direction==secur.realdir:
-                #self.spy.score += 1
-            if self.spy.press == 1 and self.spy.direction!=secur.realdir:
-                self.gg = 1
-            elif self.spy.press == 0 and self.count == 140:
-                self.gg = 1
+            if self.mode == 1:
+                if self.spy.press == 1 and self.spy.direction!=secur.realdir:
+                    self.gg = 1
+                elif self.spy.press == 0 and self.count == 140:
+                    self.gg = 1
+            elif self.mode == 2:
+                if self.spy.press == 1 and self.spy.direction==secur.realdir:
+                    self.gg = 1
+                elif self.spy.press == 0 and self.count == 140:
+                    self.gg = 1
             return
         self.wait = 0
         self.spy.state = STATE_RUN

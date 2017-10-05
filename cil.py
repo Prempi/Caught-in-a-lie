@@ -46,27 +46,26 @@ class RoomWindow(arcade.Window):
         arcade.start_render()
         
         if self.world.gg == 0:
+            if self.world.mode == 1:
+                arcade.set_background_color(arcade.color.AMAZON)
+            elif self.world.mode == 2:
+                arcade.set_background_color(arcade.color.PURPLE)
             self.spy_sprite.draw()
             self.security_sprite1.draw()
             self.security_sprite2.draw()
             self.security_sprite3.draw()
             self.security_sprite4.draw()
             xx = 100
-            yy = 100
+            yy = 370
             text = "Score : {:d}".format(self.spy_sprite.sp.score)
-            self.t8 = arcade.create_text(text, arcade.color.BLACK, 10)
+            self.t8 = arcade.create_text(text, arcade.color.LAVENDER, 18)
             arcade.render_text(self.t8, xx, yy)
         else:
-            #xx = 240
-            #yy = SCREEN_HEIGHT//2 - 64
             start_x = 300
             start_y = 200 
             arcade.render_text(self.gg,start_x,start_y)
             arcade.set_background_color(arcade.color.CHARCOAL)
-            #text = "Score : {:d}".format(self.snake_sprite.snake.length-3)
-            #self.t8 = arcade.create_text(text, arcade.color.BLACK, 30)
-            #arcade.render_text(self.t8, xx, yy)
-        
+            
     def on_key_press(self, key, key_modifiers):
         self.world.on_key_press(key, key_modifiers)
  
