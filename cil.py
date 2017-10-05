@@ -51,6 +51,11 @@ class RoomWindow(arcade.Window):
             self.security_sprite2.draw()
             self.security_sprite3.draw()
             self.security_sprite4.draw()
+            xx = 100
+            yy = 100
+            text = "Score : {:d}".format(self.spy_sprite.sp.score)
+            self.t8 = arcade.create_text(text, arcade.color.BLACK, 10)
+            arcade.render_text(self.t8, xx, yy)
         else:
             #xx = 240
             #yy = SCREEN_HEIGHT//2 - 64

@@ -102,6 +102,7 @@ class World:
             self.checknaja(self.secure3)
         elif self.spy.x == 736:
             self.checknaja(self.secure4)
+        
            
     def checknaja(self,secur):
             
@@ -113,9 +114,11 @@ class World:
             secur.update(self.count)
         self.wait += 0.5
         if self.wait < MOVE_WAIT:
-            if(self.spy.press == 1 and self.spy.direction!=secur.realdir):
+            #if self.spy.press == 1 and self.spy.direction==secur.realdir:
+                #self.spy.score += 1
+            if self.spy.press == 1 and self.spy.direction!=secur.realdir:
                 self.gg = 1
-            elif(self.spy.press == 0 and self.count == 140):
+            elif self.spy.press == 0 and self.count == 140:
                 self.gg = 1
             return
         self.wait = 0
@@ -124,6 +127,7 @@ class World:
         self.count = 1
         self.spy.press = 0
         self.spy.direction = DIR_RIGHT
+        self.spy.score+=1
         
     
         
