@@ -1,12 +1,11 @@
 import arcade.key
 from random import randint
-import math
 DIR_UP = 1
 DIR_RIGHT = 2
 DIR_DOWN = 3
 DIR_LEFT = 4
 BLOCK_SIZE = 16
-MOVE_WAIT = 80 
+MOVE_WAIT = 70 
 STATE_RUN = 1
 STATE_CHECK = 2
 
@@ -17,37 +16,17 @@ class Spy:
     BLOCK_SIZE = 16
     STATE_RUN = 1
     STATE_CHECK = 2
-    #LIE_WAIT = 1.5
-    MOVE_WAIT = 0.18
+    MOVE_WAIT = 0.025
     def __init__(self, world, x, y):
         self.world = world
         self.x = x
         self.y = y
         self.wait_time = 0
-        #self.lie_time = 0
         self.direction = DIR_RIGHT
         self.state = STATE_RUN
         self.press = 0
         self.score = 0
         self.gg = 0
-    
-    def lie(self,Security,count):
-        if count%160==0 and self.press == 0:
-            #self.gg = 1
-            return False
-
-        if self.press == 1:
-            #print(Security.direction)
-            if self.direction != Security.realdir:
-                print(str(self.direction)+' ... '+str(Security.realdir))
-                #self.gg = 1
-                return False
-                
-            elif self.direction == Security.realdir:
-                self.score += 1
-                self.press = 0
-                print(str(self.direction)+' ... '+str(Security.realdir))
-                return True
     
     def out_of_range(self):
         if self.x == 960:
@@ -96,7 +75,6 @@ class Security:
             self.x += self.SE_SIZE*DIR_OFFSET[self.direction][0]
             self.y += self.SE_SIZE*DIR_OFFSET[self.direction][1]
             self.realdir = self.direction
-            print('real dir = '+str(self.direction))
         elif count == 18:
             self.x = self.tempx
             self.y = self.tempy
@@ -114,98 +92,39 @@ class World:
         self.count = 1
         self.gg = 0
         
-        #self.state = STATE_RUN
-        
     def update(self, delta):
         self.spy.update(delta)
         if self.spy.x == 256:
-            self.spy.state = STATE_CHECK
-            self.secure.randomdir()
-            self.count += 1
-            if(self.count%9==0):
-                self.secure.update(self.count)
-            self.wait += 0.5
-            if self.wait < MOVE_WAIT:
-                
-                if(self.spy.direction==self.secure.realdir):
-                    print('True')
-                elif(self.spy.press == 1 and self.spy.direction!=self.secure.realdir):
-                    print('False')
-                    self.gg = 1
-                elif(self.spy.press == 0 and self.count == 160):
-                    self.gg = 1
-                return
-            self.wait = 0
-            self.spy.state = STATE_RUN
-            self.count = 1
-
+            self.checknaja(self.secure)
         elif self.spy.x == 416:
-            self.spy.state = STATE_CHECK
-            self.secure2.randomdir()
-            self.count += 1
-            if(self.count%9==0):
-                self.secure2.update(self.count)
-            self.wait += 0.5
-            if self.wait < MOVE_WAIT:
-                
-                if(self.spy.direction==self.secure2.realdir):
-                    print('True')
-                elif(self.spy.press == 1 and self.spy.direction!=self.secure2.realdir):
-                    print(str(self.spy.direction)+' ... '+str(self.secure.realdir))
-                    self.gg = 1
-                elif(self.spy.press == 0 and self.count == 160):
-                    self.gg = 1
-                return
-            self.wait = 0
-            self.spy.state = STATE_RUN
-            self.count = 1
-          
+            self.checknaja(self.secure2)
         elif self.spy.x == 576:
-            self.spy.state = STATE_CHECK
-            self.secure3.randomdir()
-            self.count += 1
-            if(self.count%9==0):
-                self.secure3.update(self.count)
-            self.wait += 0.5
-            if self.wait < MOVE_WAIT:
-                
-                if(self.spy.direction==self.secure3.realdir):
-                    print('True')
-                elif(self.spy.press == 1 and self.spy.direction!=self.secure3.realdir):
-                    
-                    self.gg = 1
-                elif(self.spy.press == 0 and self.count == 160):
-                    self.gg = 1
-                return
-            self.wait = 0
-            self.spy.state = STATE_RUN
-            self.count = 1
-            
+            self.checknaja(self.secure3)
         elif self.spy.x == 736:
-            self.spy.state = STATE_CHECK
-            self.secure4.randomdir()
-            self.count += 1
-            if(self.count%9==0):
-                self.secure4.update(self.count)
-            self.wait += 0.5
-            if self.wait < MOVE_WAIT:
-               
-                if(self.spy.direction==self.secure4.realdir):
-                    print('True')
-                elif(self.spy.press == 1 and self.spy.direction!=self.secure4.realdir):
-                    print('False')
-                    self.gg = 1
-                elif(self.spy.press == 0 and self.count == 160):
-                    self.gg = 1
-                return
-            self.wait = 0
-            self.spy.state = STATE_RUN
-            self.count = 1
-
-        self.spy.direction = DIR_RIGHT
+            self.checknaja(self.secure4)
+           
+    def checknaja(self,secur):
+            
+        self.spy.state = STATE_CHECK
+        secur.randomdir()
+        self.count += 1
+        #print(self.count)
+        if(self.count%9==0):
+            secur.update(self.count)
+        self.wait += 0.5
+        if self.wait < MOVE_WAIT:
+            if(self.spy.press == 1 and self.spy.direction!=secur.realdir):
+                self.gg = 1
+            elif(self.spy.press == 0 and self.count == 140):
+                self.gg = 1
+            return
+        self.wait = 0
+        self.spy.state = STATE_RUN
+        #print(str(self.count)+' ... '+str(self.spy.press))
+        self.count = 1
         self.spy.press = 0
-        #self.spy.lie(self.secure,delta)
-
+        self.spy.direction = DIR_RIGHT
+        
     
         
     def on_key_press(self, key, key_modifiers):
