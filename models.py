@@ -55,6 +55,8 @@ class Spy:
 
 class Security:
     SE_SIZE = 16
+    ORDINARY = 1
+    CLEVER = 2
     def __init__(self,world,x,y):
         self.world = world
         self.x = x
@@ -63,6 +65,7 @@ class Security:
         self.tempy = y
         self.direction = 1
         self.realdir = 0
+        self.type = randint(1,2)
 
     def randomdir(self):
         self.direction = randint(0,100)%4 + 1
@@ -93,7 +96,6 @@ class World:
         self.count = 1
         self.gg = 0
         self.mode = randint(1,2)
-        print(self.mode)
         
     def update(self, delta):
         self.spy.update(delta)
@@ -107,6 +109,12 @@ class World:
             self.checknaja(self.secure4,self.mode)
         elif self.spy.x > 736:
             self.mode = randint(1,2)
+            self.secure.type = randint(1,2)
+            self.secure2.type = randint(1,2)
+            self.secure3.type = randint(1,2)
+            self.secure4.type = randint(1,2)
+        if self.spy.x == 864:
+            self.spy.score+=1
            
     def checknaja(self,secur,mode):
             
@@ -118,24 +126,42 @@ class World:
             secur.update(self.count)
         self.wait += 0.5
         if self.wait < MOVE_WAIT:
-            if self.mode == 1:
+            if secur.type == secur.CLEVER:
+                if mode == 1:
+                    mode = 2
+                else:
+                    mode = 1
+            #print(secur.type)
+            '''        
+            if secur.type == secur.CLEVER:
+                print(mode)
+            '''
+            if mode == 1:
                 if self.spy.press == 1 and self.spy.direction!=secur.realdir:
                     self.gg = 1
                 elif self.spy.press == 0 and self.count == 140:
                     self.gg = 1
-            elif self.mode == 2:
-                if self.spy.press == 1 and self.spy.direction==secur.realdir:
+            elif mode == 2:
+                if self.spy.press == 1 and self.spy.direction==DIR_UP and secur.realdir != DIR_DOWN:
+                    self.gg = 1
+                elif self.spy.press == 1 and self.spy.direction==DIR_DOWN and secur.realdir != DIR_UP:
+                    self.gg = 1
+                elif self.spy.press == 1 and self.spy.direction==DIR_LEFT and secur.realdir != DIR_RIGHT:
+                    self.gg = 1
+                elif self.spy.press == 1 and self.spy.direction==DIR_RIGHT and secur.realdir != DIR_LEFT:
                     self.gg = 1
                 elif self.spy.press == 0 and self.count == 140:
                     self.gg = 1
             return
+        if secur.type == secur.CLEVER:
+                print(mode)
         self.wait = 0
         self.spy.state = STATE_RUN
         #print(str(self.count)+' ... '+str(self.spy.press))
         self.count = 1
         self.spy.press = 0
         self.spy.direction = DIR_RIGHT
-        self.spy.score+=1
+        #self.spy.score+=1
         
     
         
