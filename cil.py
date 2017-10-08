@@ -39,7 +39,7 @@ class SecureSprite:
  
 class RoomWindow(arcade.Window):
     def __init__(self, width, height):
-        super().__init__(width, height)
+        super().__init__(width, height,'Caught in a lie')
  
         arcade.set_background_color(arcade.color.CHARCOAL)
         self.world = World(SCREEN_WIDTH,SCREEN_HEIGHT)
@@ -57,11 +57,19 @@ class RoomWindow(arcade.Window):
         self.security_sprite4 = ModelSprite('images/Heart.png',model = self.world.secure4)
         '''
         self.gg = arcade.create_text("Game over", arcade.color.BLACK, 50)
+        #self.end_score = arcade.create_text("Score"+str(self.spy_sprite.sp.score)), arcade.color.BLACK, 50)
         self.ordi = arcade.create_text("O", arcade.color.BLACK, 20)
         self.clever = arcade.create_text("C", arcade.color.BLACK, 20)
+        self.time_elapsed = 3
+        self.t9 = arcade.create_text("Time to Lie: {:d}".format(self.time_elapsed), arcade.color.BLACK, 25)
+        #self.time_elapsed = 0
 
     def update(self, delta):
         self.world.update(delta)
+        if self.world.count % 60 == 0:
+            self.time_elapsed -= 1
+        if self.spy_sprite.sp.state == self.spy_sprite.sp.STATE_RUN:
+            self.time_elapsed = 3
 
     def on_draw(self):
         arcade.start_render()
@@ -97,10 +105,17 @@ class RoomWindow(arcade.Window):
             text = "Score : {:d}".format(int(self.spy_sprite.sp.score/2))
             self.t8 = arcade.create_text(text, arcade.color.LAVENDER, 18)
             arcade.render_text(self.t8, xx, yy)
+            text = "Time to Lie: {:d}".format(int(self.time_elapsed))
+            if text != self.t9.text:
+                self.t9 = arcade.create_text(text, arcade.color.BLACK, 25)
+            arcade.render_text(self.t9, 384, 270)
         else:
             start_x = 300
             start_y = 200 
             arcade.render_text(self.gg,start_x,start_y)
+            text = "Score : {:d}".format(int(self.spy_sprite.sp.score/2))
+            self.score = arcade.create_text(text, arcade.color.BLACK, 30)
+            arcade.render_text(self.score, start_x, start_y-100)
             arcade.set_background_color(arcade.color.CHARCOAL)
             
     def on_key_press(self, key, key_modifiers):

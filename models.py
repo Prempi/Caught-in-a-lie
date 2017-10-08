@@ -5,7 +5,7 @@ DIR_RIGHT = 2
 DIR_DOWN = 3
 DIR_LEFT = 4
 BLOCK_SIZE = 16
-MOVE_WAIT = 70 
+MOVE_WAIT = 180 
 STATE_RUN = 1
 STATE_CHECK = 2
 
@@ -96,6 +96,8 @@ class World:
         self.count = 1
         self.gg = 0
         self.mode = randint(1,2)
+        self.mode = 1
+        self.correct = 0
         
     def update(self, delta):
         self.spy.update(delta)
@@ -113,34 +115,30 @@ class World:
             self.secure2.type = randint(1,2)
             self.secure3.type = randint(1,2)
             self.secure4.type = randint(1,2)
-        if self.spy.x == 864:
+        if self.spy.x == 864 and self.gg !=1:
             self.spy.score+=1
            
-    def checknaja(self,secur,mode):
-            
+    def checknaja(self,secur,mode):   
         self.spy.state = STATE_CHECK
         secur.randomdir()
         self.count += 1
         #print(self.count)
         if(self.count%9==0):
             secur.update(self.count)
-        self.wait += 0.5
-        if self.wait < MOVE_WAIT:
+        self.wait += 1
+        while self.wait < MOVE_WAIT and self.correct == 0:
             if secur.type == secur.CLEVER:
                 if mode == 1:
                     mode = 2
                 else:
                     mode = 1
-            #print(secur.type)
-            '''        
-            if secur.type == secur.CLEVER:
-                print(mode)
-            '''
             if mode == 1:
                 if self.spy.press == 1 and self.spy.direction!=secur.realdir:
                     self.gg = 1
-                elif self.spy.press == 0 and self.count == 140:
+                elif self.spy.press == 0 and self.count == 180:
                     self.gg = 1
+                elif self.spy.press == 1 and self.spy.direction == secur.realdir :
+                    self.correct = 1
             elif mode == 2:
                 if self.spy.press == 1 and self.spy.direction==DIR_UP and secur.realdir != DIR_DOWN:
                     self.gg = 1
@@ -152,9 +150,16 @@ class World:
                     self.gg = 1
                 elif self.spy.press == 0 and self.count == 140:
                     self.gg = 1
+                elif self.spy.press == 1 and self.spy.direction==DIR_UP and secur.realdir == DIR_DOWN:
+                    self.correct = 1
+                elif self.spy.press == 1 and self.spy.direction==DIR_DOWN and secur.realdir == DIR_UP:
+                    self.correct = 1
+                elif self.spy.press == 1 and self.spy.direction==DIR_LEFT and secur.realdir == DIR_RIGHT:
+                    self.correct = 1
+                elif self.spy.press == 1 and self.spy.direction==DIR_RIGHT and secur.realdir == DIR_LEFT:
+                    self.correct = 1
             return
-        if secur.type == secur.CLEVER:
-                print(mode)
+        self.correct = 0
         self.wait = 0
         self.spy.state = STATE_RUN
         #print(str(self.count)+' ... '+str(self.spy.press))
