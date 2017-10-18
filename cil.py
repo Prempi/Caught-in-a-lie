@@ -59,6 +59,7 @@ class RoomWindow(arcade.Window):
         self.t9 = arcade.create_text("Time to Lie: {:d}".format(self.time_elapsed), arcade.color.BLACK, 25)
         self.timePerround = 0
         self.tt = arcade.create_text("Time per round: {:d}".format(self.timePerround), arcade.color.BLACK, 25)
+        self.tl = arcade.create_text("Life: {:d}".format(self.world.gg), arcade.color.BLACK, 25)
         
 
     def update(self, delta):
@@ -122,6 +123,9 @@ class RoomWindow(arcade.Window):
             if text2 != self.tt.text:
                 self.tt = arcade.create_text(text2, arcade.color.BLACK, 25)
             arcade.render_text(self.tt, 84, 300)
+            textt = "Life : {:d}".format(self.world.gg)
+            self.t7 = arcade.create_text(textt, arcade.color.BLACK, 25)
+            arcade.render_text(self.t7, 84, 200)
         else:
             arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,SCREEN_WIDTH, SCREEN_HEIGHT, self.background3)
             f = open('highscore.log', 'r')

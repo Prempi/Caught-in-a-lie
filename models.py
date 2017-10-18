@@ -97,13 +97,14 @@ class World:
         self.secure4 = Security(self,900,110)
         self.count = 1
         self.tpr = 0
-        self.gg = 1
+        self.gg = 2
         self.mode = randint(1,2)
         self.correct = 0
         self.brain1 = Brain(300,180)
         self.brain2 = Brain(500,180)
         self.brain3 = Brain(700,180)
         self.brain4 = Brain(900,180)
+        #self.minus = False
         
     def update(self, delta):
         self.spy.update(delta)
@@ -145,6 +146,7 @@ class World:
             if mode == 1:
                 if self.spy.press == 1 and self.spy.direction!=secur.realdir:
                     self.gg -= 1
+                    self.correct = 1
                 elif self.spy.press == 0 and self.count == MOVE_WAIT:
                     self.gg -= 1
                 elif self.spy.press == 1 and self.spy.direction == secur.realdir :
@@ -152,12 +154,16 @@ class World:
             elif mode == 2:
                 if self.spy.press == 1 and self.spy.direction==DIR_UP and secur.realdir != DIR_DOWN:
                     self.gg -= 1
+                    self.correct = 1
                 elif self.spy.press == 1 and self.spy.direction==DIR_DOWN and secur.realdir != DIR_UP:
                     self.gg -= 1
+                    self.correct = 1
                 elif self.spy.press == 1 and self.spy.direction==DIR_LEFT and secur.realdir != DIR_RIGHT:
                     self.gg -= 1
+                    self.correct = 1
                 elif self.spy.press == 1 and self.spy.direction==DIR_RIGHT and secur.realdir != DIR_LEFT:
                     self.gg -= 1
+                    self.correct = 1
                 elif self.spy.press == 0 and self.count == MOVE_WAIT:
                     self.gg -= 1
                 elif self.spy.press == 1 and self.spy.direction==DIR_UP and secur.realdir == DIR_DOWN:
@@ -169,12 +175,14 @@ class World:
                 elif self.spy.press == 1 and self.spy.direction==DIR_RIGHT and secur.realdir == DIR_LEFT:
                     self.correct = 1
             return
+        print(self.gg)
         self.correct = 0
         self.wait = 0
         self.spy.state = STATE_RUN
         self.count = 1
         self.spy.press = 0
         self.spy.direction = DIR_RIGHT
+        #self.minus = False
         
     def on_key_press(self, key, key_modifiers):
             if self.spy.state == self.spy.STATE_RUN:
