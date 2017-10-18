@@ -13,7 +13,7 @@ STATE_CHECK = 2
 DIR_OFFSET = {DIR_UP:(0,1), DIR_RIGHT:(1,0), DIR_DOWN:(0,-1), DIR_LEFT:(-1,0)}
 
 class Spy:
-    BLOCK_SIZE = 10
+    BLOCK_SIZE = 20
     STATE_RUN = 1
     STATE_CHECK = 2
     MOVE_WAIT = 0.025
@@ -32,9 +32,6 @@ class Spy:
     def out_of_range(self):
         if self.x == 1000:
             self.x = 0
-        elif self.x == 0:
-            self.x = 900
- 
     def update(self, delta):
         
         self.wait_time += delta
@@ -59,7 +56,7 @@ class Brain:
             
 
 class Security:
-    SE_SIZE = 16
+    SE_SIZE = 20
     ORDINARY = 1
     CLEVER = 2
     def __init__(self,world,x,y):
@@ -93,12 +90,13 @@ class World:
         self.width = width
         self.height = height
         self.wait = 0
-        self.spy = Spy(self,10,100)
+        self.spy = Spy(self,0,100)
         self.secure = Security(self,300,110)
         self.secure2 = Security(self,500,110)
         self.secure3 = Security(self,700,110)
         self.secure4 = Security(self,900,110)
         self.count = 1
+        self.tpr = 0
         self.gg = 0
         self.mode = randint(1,2)
         self.correct = 0
@@ -113,6 +111,9 @@ class World:
         
     def update(self, delta):
         self.spy.update(delta)
+        #print(self.tpr)
+        self.tpr += 1
+        #print(self.tpr)
         if self.spy.x == 200:
             self.checknaja(self.secure,self.mode)
         elif self.spy.x == 400:
@@ -127,8 +128,13 @@ class World:
             self.secure2.type = randint(1,2)
             self.secure3.type = randint(1,2)
             self.secure4.type = randint(1,2)
-        if self.spy.x == 870 and self.gg !=1:
-            self.spy.score+=1
+        if self.spy.x == 840 and self.gg !=1:
+            if self.tpr/60 < 5:
+                self.spy.score+=2
+            else:
+                self.spy.score+=1
+        if self.spy.x == 0:
+            self.tpr = 0
            
     def checknaja(self,secur,mode):   
         self.spy.state = STATE_CHECK
