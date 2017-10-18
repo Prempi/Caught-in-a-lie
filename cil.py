@@ -53,10 +53,6 @@ class RoomWindow(arcade.Window):
         self.bulldog2 = ModelSprite('images/bulldog.png',model = self.world.brain2)
         self.bulldog3 = ModelSprite('images/bulldog.png',model = self.world.brain3)
         self.bulldog4 = ModelSprite('images/bulldog.png',model = self.world.brain4)
-        self.brain1 = ModelSprite('images/brain.png',model = self.world.brain5)
-        self.brain2 = ModelSprite('images/brain.png',model = self.world.brain6)
-        self.brain3 = ModelSprite('images/brain.png',model = self.world.brain7)
-        self.brain4 = ModelSprite('images/brain.png',model = self.world.brain8)
         self.scoreCheck = False
         self.gg = arcade.create_text("Game over", arcade.color.BLACK, 50)
         self.time_elapsed = 3
@@ -86,24 +82,36 @@ class RoomWindow(arcade.Window):
                 arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,SCREEN_WIDTH, SCREEN_HEIGHT, self.background2)
             self.spy_sprite.draw()
             if self.security_sprite1.sc.type == self.security_sprite1.sc.ORDINARY:
+                self.bulldog1 = ModelSprite('images/bulldog.png',model = self.world.brain1)
                 self.bulldog1.draw()
             else:
-                self.brain1.draw()
+                self.bulldog1 = ModelSprite('images/brain.png',model = self.world.brain1)
+                self.bulldog1.draw()
+                #self.brain1.draw()
             self.security_sprite1.draw()
             if self.security_sprite2.sc.type == self.security_sprite2.sc.ORDINARY:
+                self.bulldog2 = ModelSprite('images/bulldog.png',model = self.world.brain2)
                 self.bulldog2.draw()
             else:
-                self.brain2.draw()
+                self.bulldog2 = ModelSprite('images/brain.png',model = self.world.brain2)
+                self.bulldog2.draw()
+                #self.brain2.draw()
             self.security_sprite2.draw()
             if self.security_sprite3.sc.type == self.security_sprite3.sc.ORDINARY:
+                self.bulldog3 = ModelSprite('images/bulldog.png',model = self.world.brain3)
                 self.bulldog3.draw()
             else:
-                self.brain3.draw()
+                self.bulldog3 = ModelSprite('images/brain.png',model = self.world.brain3)
+                self.bulldog3.draw()
+                #self.brain2.draw()
             self.security_sprite3.draw()
             if self.security_sprite4.sc.type == self.security_sprite4.sc.ORDINARY:
+                self.bulldog4 = ModelSprite('images/bulldog.png',model = self.world.brain4)
                 self.bulldog4.draw()
             else:
-                self.brain4.draw()
+                self.bulldog4 = ModelSprite('images/brain.png',model = self.world.brain4)
+                self.bulldog4.draw()
+                #self.brain2.draw()
             self.security_sprite4.draw()
             xx = 100
             yy = 370

@@ -104,10 +104,6 @@ class World:
         self.brain2 = Brain(500,180)
         self.brain3 = Brain(700,180)
         self.brain4 = Brain(900,180)
-        self.brain5 = Brain(300,180)
-        self.brain6 = Brain(500,180)
-        self.brain7 = Brain(700,180)
-        self.brain8 = Brain(900,180)
         
     def update(self, delta):
         self.spy.update(delta)
