@@ -97,7 +97,7 @@ class World:
         self.secure4 = Security(self,900,110)
         self.count = 1
         self.tpr = 0
-        self.gg = 0
+        self.gg = 1
         self.mode = randint(1,2)
         self.correct = 0
         self.brain1 = Brain(300,180)
@@ -107,9 +107,7 @@ class World:
         
     def update(self, delta):
         self.spy.update(delta)
-        #print(self.tpr)
         self.tpr += 1
-        #print(self.tpr)
         if self.spy.x == 200:
             self.checknaja(self.secure,self.mode)
         elif self.spy.x == 400:
@@ -124,7 +122,7 @@ class World:
             self.secure2.type = randint(1,2)
             self.secure3.type = randint(1,2)
             self.secure4.type = randint(1,2)
-        if self.spy.x == 840 and self.gg !=1:
+        if self.spy.x == 840 and self.gg >0:
             if self.tpr/60 < 5:
                 self.spy.score+=2
             else:
@@ -136,7 +134,6 @@ class World:
         self.spy.state = STATE_CHECK
         secur.randomdir()
         self.count += 1
-        #print(self.count)
         if(self.count%9==0):
             secur.update(self.count)
         self.wait += 1
@@ -148,22 +145,22 @@ class World:
                     mode = 1
             if mode == 1:
                 if self.spy.press == 1 and self.spy.direction!=secur.realdir:
-                    self.gg = 1
+                    self.gg -= 1
                 elif self.spy.press == 0 and self.count == MOVE_WAIT:
-                    self.gg = 1
+                    self.gg -= 1
                 elif self.spy.press == 1 and self.spy.direction == secur.realdir :
                     self.correct = 1
             elif mode == 2:
                 if self.spy.press == 1 and self.spy.direction==DIR_UP and secur.realdir != DIR_DOWN:
-                    self.gg = 1
+                    self.gg -= 1
                 elif self.spy.press == 1 and self.spy.direction==DIR_DOWN and secur.realdir != DIR_UP:
-                    self.gg = 1
+                    self.gg -= 1
                 elif self.spy.press == 1 and self.spy.direction==DIR_LEFT and secur.realdir != DIR_RIGHT:
-                    self.gg = 1
+                    self.gg -= 1
                 elif self.spy.press == 1 and self.spy.direction==DIR_RIGHT and secur.realdir != DIR_LEFT:
-                    self.gg = 1
+                    self.gg -= 1
                 elif self.spy.press == 0 and self.count == MOVE_WAIT:
-                    self.gg = 1
+                    self.gg -= 1
                 elif self.spy.press == 1 and self.spy.direction==DIR_UP and secur.realdir == DIR_DOWN:
                     self.correct = 1
                 elif self.spy.press == 1 and self.spy.direction==DIR_DOWN and secur.realdir == DIR_UP:
@@ -176,13 +173,9 @@ class World:
         self.correct = 0
         self.wait = 0
         self.spy.state = STATE_RUN
-        #print(str(self.count)+' ... '+str(self.spy.press))
         self.count = 1
         self.spy.press = 0
         self.spy.direction = DIR_RIGHT
-        #self.spy.score+=1
-        
-    
         
     def on_key_press(self, key, key_modifiers):
             if self.spy.state == self.spy.STATE_RUN:

@@ -75,7 +75,7 @@ class RoomWindow(arcade.Window):
     def on_draw(self):
         arcade.start_render()
         
-        if self.world.gg == 0:
+        if self.world.gg > 0:
             if self.world.mode == 1:
                 arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
             elif self.world.mode == 2:
@@ -87,7 +87,6 @@ class RoomWindow(arcade.Window):
             else:
                 self.bulldog1 = ModelSprite('images/brain.png',model = self.world.brain1)
                 self.bulldog1.draw()
-                #self.brain1.draw()
             self.security_sprite1.draw()
             if self.security_sprite2.sc.type == self.security_sprite2.sc.ORDINARY:
                 self.bulldog2 = ModelSprite('images/bulldog.png',model = self.world.brain2)
@@ -95,7 +94,6 @@ class RoomWindow(arcade.Window):
             else:
                 self.bulldog2 = ModelSprite('images/brain.png',model = self.world.brain2)
                 self.bulldog2.draw()
-                #self.brain2.draw()
             self.security_sprite2.draw()
             if self.security_sprite3.sc.type == self.security_sprite3.sc.ORDINARY:
                 self.bulldog3 = ModelSprite('images/bulldog.png',model = self.world.brain3)
@@ -103,7 +101,6 @@ class RoomWindow(arcade.Window):
             else:
                 self.bulldog3 = ModelSprite('images/brain.png',model = self.world.brain3)
                 self.bulldog3.draw()
-                #self.brain2.draw()
             self.security_sprite3.draw()
             if self.security_sprite4.sc.type == self.security_sprite4.sc.ORDINARY:
                 self.bulldog4 = ModelSprite('images/bulldog.png',model = self.world.brain4)
@@ -111,7 +108,6 @@ class RoomWindow(arcade.Window):
             else:
                 self.bulldog4 = ModelSprite('images/brain.png',model = self.world.brain4)
                 self.bulldog4.draw()
-                #self.brain2.draw()
             self.security_sprite4.draw()
             xx = 100
             yy = 370
