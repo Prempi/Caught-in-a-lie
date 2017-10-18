@@ -134,8 +134,7 @@ class World:
         self.spy.state = STATE_CHECK
         secur.randomdir()
         self.count += 1
-        if(self.count%9==0):
-            secur.update(self.count)
+        secur.update(self.count)
         self.wait += 1
         while self.wait < MOVE_WAIT and self.correct == 0:
             if secur.type == secur.CLEVER:
